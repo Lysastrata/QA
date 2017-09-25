@@ -1,0 +1,7 @@
+<form (submit)="onSubmit()">
+  Question: <input type="text" name="question" [(ngModel)]="question.question" >
+  correct Answer: <input type="text" name="correct" [(ngModel)]="question.correct" >
+  Wrong Answer 1: <input type="text" name="wrong" [(ngModel)]="question.wrong" >
+  Wrong Answer 2: <input type="text" name="fake" [(ngModel)]="question.fake" >
+  <input type="submit" value="submit" id="">
+</form>
