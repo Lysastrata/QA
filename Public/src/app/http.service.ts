@@ -9,22 +9,27 @@ export class HttpService {
 
   createQuestion(question) {
     console.log("im inside the createQuestion of service:", question)
-    return this._http.post('/api/questions/create', question)
+    return this._http.post('/api/all', question)
     .map( data => data.json() )
   }
-  addScore(score) {
-    console.log("im inside the addScore of service:", score)
-    return this._http.post('/api/scores/create', score)
+  addAnswer(answer, id) {
+    console.log("im inside the addAnswer of service:", answer)
+    return this._http.post(`/api/${id}`, answer)
     .map( data => data.json() )
   }
-  retrieveScores(){
-    console.log("in httpservice retirveScores")
-    return this._http.get('/api/scores')
+  retrieveOne(id){
+    console.log("in httpservice retirveOne")
+    return this._http.get(`/api/${id}`)
     .map( data => data.json() )
   }
   retrieveQuestions(){
     console.log("in httpservice retirveQuestions")
-    return this._http.get('/api/questions')
+    return this._http.get('/api/all')
     .map( data => data.json() )
   }
+  // addLike(id){
+  //   console.log('in service like');
+  //   return this._http.get(`/api/like/${id}`)
+  //   .map( data => data.json())
+  // }
 }

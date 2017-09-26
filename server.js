@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 
 var path = require('path');
 
-app.use(express.static(path.join(__dirname, '/TriviaApp/dist')));
+app.use(express.static(path.join(__dirname, '/Public/dist')));
 
 require('./server/config/mongoose.js');
 console.log("inside server")

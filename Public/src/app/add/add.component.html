@@ -1,0 +1,10 @@
+<a [routerLink]="['']">Home</a>
+<h1>{{question.question}}</h1>
+<h2>{{question.description}}</h2>
+
+<form (submit)="onSumbit()">
+  Name: <input type="text" name="name" [(ngModel)]="answer.name" >
+  Answer: <input type="text" name="answer" [(ngModel)]="answer.answer" >
+  Sources: <input type="text" name="support" [(ngModel)]="answer.support" >
+  <input type="submit" value="submit" id="">
+</form>

@@ -1,0 +1,6 @@
+<a [routerLink]="['']">Home</a>
+<form (submit)="onSumbit()">
+  Question: <input type="text" name="question" [(ngModel)]="question.question" >
+  Description: <input type="text" name="description" [(ngModel)]="question.description" >
+  <input type="submit" value="submit" id="">
+</form>

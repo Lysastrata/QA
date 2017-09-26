@@ -9,14 +9,15 @@ import {Router} from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
 
-scores = [];
+qs = [];
   constructor(private _httpService: HttpService, private router: Router) { }
 
   ngOnInit() {
     console.log("dashbaord loaded comp")
-    this._httpService.retrieveScores()
-    .subscribe(data => { this.scores = data; console.log("Surveys in dasboard", data),
+    this._httpService.retrieveQuestions()
+    .subscribe(data => { this.qs = data; console.log("Surveys in dasboard", data),
               err => { console.log("error in survey retrieval",err); }})
 
   }
+  
 }

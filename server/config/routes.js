@@ -1,30 +1,33 @@
-var score = require('../controllers/scores.js');
+var qs = require('../controllers/qs.js');
 var path = require('path');
 
 module.exports = function (app){
     console.log("in routes");
 
-    app.get('/api/scores', function (req, res){
+    app.get('/api/all', function (req, res){
         console.log("in get req")
-        score.showScores(req, res);
+        qs.showAll(req, res);
     });
 
-    app.get('/api/questions', function (req, res){
+    app.get('/api/:id', function (req, res){
         console.log("in get req")
-        score.showQuestions(req, res);
+        qs.showOne(req, res);
     });
 
-    app.post('/api/scores/create', function (req, res){
+    app.post('/api/all', function (req, res){
         console.log("in routes.js post add")
-        score.addScore(req, res);
+        qs.create(req, res);
     });
 
-    app.post('/api/questions/create', function (req, res){
+    app.post('/api/:id', function (req, res){
         console.log("in routes.js post create")
-        score.create(req, res);
+        qs.add(req, res);
     });
-
+    app.get('/api/like/:id', function(req, res){
+        console.log('route like')
+        qs.like(req, res);
+    });
     app.all("*", (req,res,next) => {
-        res.sendFile(path.resolve("./TriviaApp/dist/index.html"))
+        res.sendFile(path.resolve("./Public/dist/index.html"))
     });
 }

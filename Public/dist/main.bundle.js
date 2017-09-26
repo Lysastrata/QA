@@ -38,7 +38,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/add/add.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form (submit)=\"onSubmit()\">\n  Question: <input type=\"text\" name=\"question\" [(ngModel)]=\"question.question\" >\n  correct Answer: <input type=\"text\" name=\"correct\" [(ngModel)]=\"question.correct\" >\n  Wrong Answer 1: <input type=\"text\" name=\"wrong\" [(ngModel)]=\"question.wrong\" >\n  Wrong Answer 2: <input type=\"text\" name=\"fake\" [(ngModel)]=\"question.fake\" >\n  <input type=\"submit\" value=\"submit\" id=\"\">\n</form>"
+module.exports = "<a [routerLink]=\"['']\">Home</a>\n<h1>{{question.question}}</h1>\n<h2>{{question.description}}</h2>\n\n<form (submit)=\"onSumbit()\">\n  Name: <input type=\"text\" name=\"name\" [(ngModel)]=\"answer.name\" >\n  Answer: <input type=\"text\" name=\"answer\" [(ngModel)]=\"answer.answer\" >\n  Sources: <input type=\"text\" name=\"support\" [(ngModel)]=\"answer.support\" >\n  <input type=\"submit\" value=\"submit\" id=\"\">\n</form>"
 
 /***/ }),
 
@@ -63,26 +63,37 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var AddComponent = (function () {
-    function AddComponent(_httpService, router) {
+    function AddComponent(_route, _httpService, router) {
+        this._route = _route;
         this._httpService = _httpService;
         this.router = router;
-        this.question = {
-            "question": "",
-            "correct": "",
-            "wrong": "",
-            "fake": ""
+        this.answer = { "name": "",
+            "answer": "",
+            "support": ""
         };
     }
     AddComponent.prototype.onSumbit = function () {
         var _this = this;
-        this._httpService.createQuestion(this.question)
+        this._httpService.addAnswer(this.answer, this.question_id)
             .subscribe(function (data) {
-            _this.question = data;
+            _this.answer = data;
             console.log("Surveys in dasboard", data),
                 function (err) { console.log("error in survey retrieval", err); };
         });
+        this.router.navigateByUrl('/');
     };
     AddComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this._route.params.subscribe(function (param) {
+            console.log("this is param", param.id);
+            _this.question_id = param.id;
+            _this._httpService.retrieveOne(_this.question_id)
+                .subscribe(function (data) {
+                _this.question = data;
+                console.log("Q:", _this.question),
+                    function (err) { console.log("err in retrieving one Q", err); };
+            });
+        });
     };
     return AddComponent;
 }());
@@ -92,10 +103,10 @@ AddComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/add/add.component.html"),
         styles: [__webpack_require__("../../../../../src/app/add/add.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _c || Object])
 ], AddComponent);
 
-var _a, _b;
+var _a, _b, _c;
 //# sourceMappingURL=add.component.js.map
 
 /***/ }),
@@ -108,8 +119,9 @@ var _a, _b;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/dashboard/dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__add_add_component__ = __webpack_require__("../../../../../src/app/add/add.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__quiz_quiz_component__ = __webpack_require__("../../../../../src/app/quiz/quiz.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__create_create_component__ = __webpack_require__("../../../../../src/app/create/create.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__one_one_component__ = __webpack_require__("../../../../../src/app/one/one.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__add_add_component__ = __webpack_require__("../../../../../src/app/add/add.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -121,10 +133,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
+
 var routes = [
     { path: '', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_2__dashboard_dashboard_component__["a" /* DashboardComponent */] },
-    { path: 'add', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_3__add_add_component__["a" /* AddComponent */] },
-    { path: 'quiz', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_4__quiz_quiz_component__["a" /* QuizComponent */] },
+    { path: 'add/:id', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_5__add_add_component__["a" /* AddComponent */] },
+    { path: 'one/:id', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_4__one_one_component__["a" /* OneComponent */] },
+    { path: 'create', pathMatch: 'full', component: __WEBPACK_IMPORTED_MODULE_3__create_create_component__["a" /* CreateComponent */] }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {
@@ -133,8 +147,8 @@ var AppRoutingModule = (function () {
 }());
 AppRoutingModule = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["M" /* NgModule */])({
-        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */].forRoot(routes)],
-        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["b" /* RouterModule */]]
+        imports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */].forRoot(routes)],
+        exports: [__WEBPACK_IMPORTED_MODULE_1__angular_router__["c" /* RouterModule */]]
     })
 ], AppRoutingModule);
 
@@ -163,7 +177,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<a [routerLink]=\"['']\">Home</a>\n<a [routerLink]=\"['quiz']\">Play</a>\n<a [routerLink]=\"['add']\">Add a Question</a>\n<router-outlet></router-outlet>"
+module.exports = "<router-outlet></router-outlet>"
 
 /***/ }),
 
@@ -215,7 +229,7 @@ AppComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/app.component.html"),
         styles: [__webpack_require__("../../../../../src/app/app.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object])
 ], AppComponent);
 
 var _a, _b;
@@ -236,14 +250,16 @@ var _a, _b;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_routing_module__ = __webpack_require__("../../../../../src/app/app-routing.module.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__("../../../../../src/app/app.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__dashboard_dashboard_component__ = __webpack_require__("../../../../../src/app/dashboard/dashboard.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__add_add_component__ = __webpack_require__("../../../../../src/app/add/add.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__quiz_quiz_component__ = __webpack_require__("../../../../../src/app/quiz/quiz.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__create_create_component__ = __webpack_require__("../../../../../src/app/create/create.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__one_one_component__ = __webpack_require__("../../../../../src/app/one/one.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__add_add_component__ = __webpack_require__("../../../../../src/app/add/add.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -264,8 +280,9 @@ AppModule = __decorate([
         declarations: [
             __WEBPACK_IMPORTED_MODULE_6__app_component__["a" /* AppComponent */],
             __WEBPACK_IMPORTED_MODULE_7__dashboard_dashboard_component__["a" /* DashboardComponent */],
-            __WEBPACK_IMPORTED_MODULE_8__add_add_component__["a" /* AddComponent */],
-            __WEBPACK_IMPORTED_MODULE_9__quiz_quiz_component__["a" /* QuizComponent */]
+            __WEBPACK_IMPORTED_MODULE_8__create_create_component__["a" /* CreateComponent */],
+            __WEBPACK_IMPORTED_MODULE_9__one_one_component__["a" /* OneComponent */],
+            __WEBPACK_IMPORTED_MODULE_10__add_add_component__["a" /* AddComponent */]
         ],
         imports: [
             __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
@@ -279,6 +296,88 @@ AppModule = __decorate([
 ], AppModule);
 
 //# sourceMappingURL=app.module.js.map
+
+/***/ }),
+
+/***/ "../../../../../src/app/create/create.component.css":
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "", ""]);
+
+// exports
+
+
+/*** EXPORTS FROM exports-loader ***/
+module.exports = module.exports.toString();
+
+/***/ }),
+
+/***/ "../../../../../src/app/create/create.component.html":
+/***/ (function(module, exports) {
+
+module.exports = "<a [routerLink]=\"['']\">Home</a>\n<form (submit)=\"onSumbit()\">\n  Question: <input type=\"text\" name=\"question\" [(ngModel)]=\"question.question\" >\n  Description: <input type=\"text\" name=\"description\" [(ngModel)]=\"question.description\" >\n  <input type=\"submit\" value=\"submit\" id=\"\">\n</form>"
+
+/***/ }),
+
+/***/ "../../../../../src/app/create/create.component.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CreateComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__http_service__ = __webpack_require__("../../../../../src/app/http.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var CreateComponent = (function () {
+    function CreateComponent(_httpService, router) {
+        this._httpService = _httpService;
+        this.router = router;
+        this.question = {
+            "question": "",
+            "description": ""
+        };
+    }
+    CreateComponent.prototype.onSumbit = function () {
+        var _this = this;
+        this._httpService.createQuestion(this.question)
+            .subscribe(function (data) {
+            _this.question = data;
+            console.log("Surveys in dasboard", data),
+                function (err) { console.log("error in survey retrieval", err); };
+        });
+        this.router.navigateByUrl('/');
+    };
+    CreateComponent.prototype.ngOnInit = function () {
+    };
+    return CreateComponent;
+}());
+CreateComponent = __decorate([
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
+        selector: 'app-create',
+        template: __webpack_require__("../../../../../src/app/create/create.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/create/create.component.css")]
+    }),
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object])
+], CreateComponent);
+
+var _a, _b;
+//# sourceMappingURL=create.component.js.map
 
 /***/ }),
 
@@ -303,7 +402,7 @@ module.exports = module.exports.toString();
 /***/ "../../../../../src/app/dashboard/dashboard.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<table>\n  <thead>\n    <th>Name</th>\n    <th>Score</th>\n    <th>Percentage</th>\n  </thead>\n  <tbody *ngFor=\"let score of scores\">\n    <td>{{score.name}}</td>\n    <td>{{score.score}}/3</td>\n    <td>{{score.score/3</td>\n  </tbody>\n</table>\n"
+module.exports = "<a [routerLink]=\"['create' ]\">Add new Question</a>\n<table>\n  <thead>\n    <th>Question</th>\n    <th>Answer</th>\n    <th>Action</th>\n  </thead>\n  <tbody *ngFor=\"let q of qs\">\n    <td>{{q.question}}</td>\n    <td>{{q.answers.length}}</td>\n    <td><a [routerLink]=\"['one', q._id ]\">Show</a> <a [routerLink]=\"['add', q._id ]\">Answer</a> </td>\n  </tbody>\n</table>\n"
 
 /***/ }),
 
@@ -331,14 +430,14 @@ var DashboardComponent = (function () {
     function DashboardComponent(_httpService, router) {
         this._httpService = _httpService;
         this.router = router;
-        this.scores = [];
+        this.qs = [];
     }
     DashboardComponent.prototype.ngOnInit = function () {
         var _this = this;
         console.log("dashbaord loaded comp");
-        this._httpService.retrieveScores()
+        this._httpService.retrieveQuestions()
             .subscribe(function (data) {
-            _this.scores = data;
+            _this.qs = data;
             console.log("Surveys in dasboard", data),
                 function (err) { console.log("error in survey retrieval", err); };
         });
@@ -351,7 +450,7 @@ DashboardComponent = __decorate([
         template: __webpack_require__("../../../../../src/app/dashboard/dashboard.component.html"),
         styles: [__webpack_require__("../../../../../src/app/dashboard/dashboard.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _b || Object])
 ], DashboardComponent);
 
 var _a, _b;
@@ -386,22 +485,22 @@ var HttpService = (function () {
     }
     HttpService.prototype.createQuestion = function (question) {
         console.log("im inside the createQuestion of service:", question);
-        return this._http.post('/api/questions/create', question)
+        return this._http.post('/api/all', question)
             .map(function (data) { return data.json(); });
     };
-    HttpService.prototype.addScore = function (score) {
-        console.log("im inside the addScore of service:", score);
-        return this._http.post('/api/scores/create', score)
+    HttpService.prototype.addAnswer = function (answer, id) {
+        console.log("im inside the addAnswer of service:", answer);
+        return this._http.post("/api/" + id, answer)
             .map(function (data) { return data.json(); });
     };
-    HttpService.prototype.retrieveScores = function () {
-        console.log("in httpservice retirveScores");
-        return this._http.get('/api/scores')
+    HttpService.prototype.retrieveOne = function (id) {
+        console.log("in httpservice retirveOne");
+        return this._http.get("/api/" + id)
             .map(function (data) { return data.json(); });
     };
     HttpService.prototype.retrieveQuestions = function () {
         console.log("in httpservice retirveQuestions");
-        return this._http.get('/api/questions')
+        return this._http.get('/api/all')
             .map(function (data) { return data.json(); });
     };
     return HttpService;
@@ -416,7 +515,7 @@ var _a;
 
 /***/ }),
 
-/***/ "../../../../../src/app/quiz/quiz.component.css":
+/***/ "../../../../../src/app/one/one.component.css":
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__("../../../../css-loader/lib/css-base.js")(false);
@@ -434,18 +533,18 @@ module.exports = module.exports.toString();
 
 /***/ }),
 
-/***/ "../../../../../src/app/quiz/quiz.component.html":
+/***/ "../../../../../src/app/one/one.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form (submit)=\"onSumbit()\" >\n  Name: <input type=\"text\" name=\"name\" [(ngModel)]=\"score.name\" >\n  <div *ngFor='let question of show; let i = index'></div>\n    <p>{{question.question}}</p>\n    {{question.correct}} <input type=\"radio\" name='one' [(ngModel)]='s'+{{i}}+'' value='correct'>\n    {{question.wrong}}<input type=\"radio\" name='one' [(ngModel)]='s'+{{i}}+''  value='wrong'>\n    {{question.fake}}<input type=\"radio\" name='one' [(ngModel)]='s'+{{i}}+''  value='wrong'>\n  <input type=\"submit\" value=\"submit\" id=\"\">\n</form>"
+module.exports = "<a [routerLink]=\"['']\">Home</a>\n<h1>{{question.question}}</h1>\n<h2>{{question.description}}</h2>\n\n<div *ngFor='let answer of question.answers'>\n  <p>{{answer.name}}:</p>\n  <p>{{answer.answer}}</p>\n  <p>{{answer.support}}</p>\n {{answer.likes}} Likes <button><a href='api/like/{{answer._id}}'>Like</a></button>\n</div>"
 
 /***/ }),
 
-/***/ "../../../../../src/app/quiz/quiz.component.ts":
+/***/ "../../../../../src/app/one/one.component.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return QuizComponent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return OneComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("../../../core/@angular/core.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__http_service__ = __webpack_require__("../../../../../src/app/http.service.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_router__ = __webpack_require__("../../../router/@angular/router.es5.js");
@@ -461,65 +560,41 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var QuizComponent = (function () {
-    function QuizComponent(_httpService, router) {
+var OneComponent = (function () {
+    function OneComponent(_route, _httpService, router) {
+        this._route = _route;
         this._httpService = _httpService;
         this.router = router;
-        this.questions = [];
-        this.show = [];
-        this.score = {
-            "name": "",
-            "score": 0,
-        };
     }
-    QuizComponent.prototype.ngOnInit = function () {
+    OneComponent.prototype.ngOnInit = function () {
         var _this = this;
-        console.log("dashbaord loaded comp");
-        this._httpService.retrieveQuestions()
-            .subscribe(function (data) {
-            _this.questions = data;
-            console.log("Surveys in dasboard", data),
-                function (err) { console.log("error in survey retrieval", err); };
+        this._route.params.subscribe(function (param) {
+            console.log("this is param", param.id);
+            _this.question_id = param.id;
+            _this._httpService.retrieveOne(_this.question_id)
+                .subscribe(function (data) {
+                _this.question = data;
+                console.log("A:", _this.question.answers),
+                    function (err) { console.log("err in retrieving one Q", err); };
+            });
         });
-        for (var i = 0; i < 3; i++) {
-            this.show.push(Math.floor(Math.random() * this.questions.length));
-        }
+        console.log(this.question.answers[0]);
     };
-    QuizComponent.prototype.onSumbit = function () {
-        var _this = this;
-        if (this.s0) {
-            this.score.score++;
-        }
-        ;
-        if (this.s1) {
-            this.score.score++;
-        }
-        ;
-        if (this.s2) {
-            this.score.score++;
-        }
-        ;
-        this._httpService.addScore(this.score)
-            .subscribe(function (data) {
-            _this.questions = data;
-            console.log("Surveys in dasboard", data),
-                function (err) { console.log("error in survey retrieval", err); };
-        });
-        this.router.navigateByUrl('/');
+    OneComponent.prototype.like = function () {
     };
-    return QuizComponent;
+    return OneComponent;
 }());
-QuizComponent = __decorate([
+OneComponent = __decorate([
     Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["o" /* Component */])({
-        selector: 'app-quiz',
-        template: __webpack_require__("../../../../../src/app/quiz/quiz.component.html"),
-        styles: [__webpack_require__("../../../../../src/app/quiz/quiz.component.css")]
+        selector: 'app-one',
+        template: __webpack_require__("../../../../../src/app/one/one.component.html"),
+        styles: [__webpack_require__("../../../../../src/app/one/one.component.css")]
     }),
-    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* Router */]) === "function" && _b || Object])
-], QuizComponent);
+    __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["a" /* ActivatedRoute */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__http_service__["a" /* HttpService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__angular_router__["b" /* Router */]) === "function" && _c || Object])
+], OneComponent);
 
-var _a, _b;
-//# sourceMappingURL=quiz.component.js.map
+var _a, _b, _c;
+//# sourceMappingURL=one.component.js.map
 
 /***/ }),
 

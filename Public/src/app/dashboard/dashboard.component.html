@@ -1,0 +1,13 @@
+<a [routerLink]="['create' ]">Add new Question</a>
+<table>
+  <thead>
+    <th>Question</th>
+    <th>Answer</th>
+    <th>Action</th>
+  </thead>
+  <tbody *ngFor="let q of qs">
+    <td>{{q.question}}</td>
+    <td>{{q.answers.length}}</td>
+    <td><a [routerLink]="['one', q._id ]">Show</a> <a [routerLink]="['add', q._id ]">Answer</a> </td>
+  </tbody>
+</table>

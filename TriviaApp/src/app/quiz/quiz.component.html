@@ -1,9 +1,0 @@
-<form (submit)="onSumbit()" >
-  Name: <input type="text" name="name" [(ngModel)]="score.name" >
-  <div *ngFor='let question of show; let i = index'></div>
-    <p>{{question.question}}</p>
-    {{question.correct}} <input type="radio" name='one' [(ngModel)]='s'+{{i}}+'' value='correct'>
-    {{question.wrong}}<input type="radio" name='one' [(ngModel)]='s'+{{i}}+''  value='wrong'>
-    {{question.fake}}<input type="radio" name='one' [(ngModel)]='s'+{{i}}+''  value='wrong'>
-  <input type="submit" value="submit" id="">
-</form>

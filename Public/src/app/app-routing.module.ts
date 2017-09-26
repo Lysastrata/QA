@@ -1,13 +1,15 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { CreateComponent } from './create/create.component';
+import { OneComponent } from './one/one.component';
 import { AddComponent } from './add/add.component';
-import { QuizComponent } from './quiz/quiz.component';
 
 const routes: Routes = [
 {path: '', pathMatch: 'full', component:DashboardComponent},
-{path: 'add', pathMatch: 'full', component:AddComponent},
-{path: 'quiz', pathMatch: 'full', component:QuizComponent},
+{path: 'add/:id', pathMatch: 'full', component:AddComponent},
+{path: 'one/:id', pathMatch: 'full', component:OneComponent},
+{path: 'create', pathMatch: 'full', component:CreateComponent}
 
 ];
 

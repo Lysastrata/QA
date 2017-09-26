@@ -1,0 +1,10 @@
+<a [routerLink]="['']">Home</a>
+<h1>{{question.question}}</h1>
+<h2>{{question.description}}</h2>
+
+<div *ngFor='let answer of question.answers'>
+  <p>{{answer.name}}:</p>
+  <p>{{answer.answer}}</p>
+  <p>{{answer.support}}</p>
+ {{answer.likes}} Likes <button><a href='api/like/{{answer._id}}'>Like</a></button>
+</div>
